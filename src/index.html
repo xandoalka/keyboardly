@@ -15,7 +15,15 @@
       <div class="flex items-center justify-between w-11/12 mx-auto py-2">
          <img src="./images/keyboardly.png" alt="" />
          <img src="./images/googleplay.png" alt="" />
-         <img src="./images/bar.png" alt="" />
+         <button class="w-6 h-6 flex justify-center items-center text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-align-justify">
+               <line x1="3" x2="21" y1="6" y2="6" />
+               <line x1="3" x2="21" y1="12" y2="12" />
+               <line x1="3" x2="21" y1="18" y2="18" />
+            </svg>
+         </button>
       </div>
    </header>
    <!-- MAIN -->
@@ -23,17 +31,39 @@
       <!-- HEADER MAIN -->
       <div class="flex items-center my-3 w-full gap-2 justify-between">
          <span class="h-12 max-w-96 bg-gray-100 rounded-lg overflow-hidden flex items-center gap-2 px-3">
-            <img src="./images/search.png" class="h-6 w-6">
+            <span class="h-6 w-6 text-gray-400">
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-search">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
+               </svg>
+            </span>
             <input type="text" placeholder="Search"
                class="bg-transparent h-full w-full outline-none placeholder:text-gray-400/70">
-            <img src="./images/x.png" class="h-6 w-6">
+            <span class="h-6 w-6 text-gray-400">
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-x">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+               </svg>
+            </span>
          </span>
-         <button class="w-14 xx:w-12 h-12 rounded-xl border-2 overflow-hidden p-2 flex justify-center items-center">
-            <img src="./images/button.png" class="h-6 w-6 object-cover">
+         <button
+            class="w-14 xx:w-12 h-12 rounded-xl border-2 overflow-hidden p-2 flex justify-center items-center text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-layout-grid">
+               <rect width="7" height="7" x="3" y="3" rx="1" />
+               <rect width="7" height="7" x="14" y="3" rx="1" />
+               <rect width="7" height="7" x="14" y="14" rx="1" />
+               <rect width="7" height="7" x="3" y="14" rx="1" />
+            </svg>
          </button>
       </div>
       <!-- FILTERS -->
-      <div id="filters" class="flex items-center gap-2 my-6 text-gray-400">
+      <div id="filters" class="flex items-center gap-2 mt-6 mb-4 text-gray-400">
          <span>Name</span>
          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
@@ -43,9 +73,9 @@
          </svg>
       </div>
       <!-- BODY MAIN -->
-       <div id="items-container">
+      <div id="items-container">
 
-       </div>
+      </div>
    </main>
 </body>
 

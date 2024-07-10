@@ -11,11 +11,17 @@
 
 <body>
    <!-- HEADER -->
-   <header class="w-full sticky top-0">
-      <div class="flex items-center justify-between w-11/12 mx-auto py-2">
-         <img src="./images/keyboardly.png" alt="" />
+   <header class="w-full sticky top-0 bg-white">
+      <div class="flex items-center justify-between w-11/12 mx-auto py-2 md:py-5 max-w-7xl">
+         <img class="block lg:hidden" src="./images/keyboardly.png" alt="" />
+         <img class="hidden lg:block" src="./images/keyboardly-dekstop.png" alt="">
+         <nav class="hidden lg:flex items-center gap-12 text-gray-400 font-semibold">
+            <a href="#">Home</a>
+            <a href="#" class="text-green-500">Addons Marketplace</a>
+            <a href="#">Developer</a>
+         </nav>
          <img src="./images/googleplay.png" alt="" />
-         <button class="w-6 h-6 flex justify-center items-center text-gray-500">
+         <button class="w-6 h-6 flex justify-center items-center text-gray-500 lg:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                class="lucide lucide-align-justify">
@@ -27,54 +33,79 @@
       </div>
    </header>
    <!-- MAIN -->
-   <main class="w-11/12 mx-auto">
+   <main class="w-11/12 mx-auto max-w-6xl md:mt-8">
       <!-- HEADER MAIN -->
-      <div class="flex items-center my-3 w-full gap-2 justify-between">
-         <span class="h-12 max-w-96 bg-gray-100 rounded-lg overflow-hidden flex items-center gap-2 px-3">
-            <span class="h-6 w-6 text-gray-400">
+      <div class="flex items-center my-3 w-full gap-2 justify-between mb-8 md:mb-10">
+         <span
+            class="h-12 max-w-80 lg:max-w-[400px] md:w-full bg-gray-100 rounded-lg overflow-hidden flex items-center gap-2 px-3">
+            <span class="h-6 w-6 text-gray-500">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
                   class="lucide lucide-search">
                   <circle cx="11" cy="11" r="8" />
                   <path d="m21 21-4.3-4.3" />
                </svg>
             </span>
             <input type="text" placeholder="Search"
-               class="bg-transparent h-full w-full outline-none placeholder:text-gray-400/70">
-            <span class="h-6 w-6 text-gray-400">
+               class="bg-transparent h-full w-full text-gray-600 outline-none placeholder:text-gray-400/70">
+            <span class="h-6 w-6 text-gray-500">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
                   class="lucide lucide-x">
                   <path d="M18 6 6 18" />
                   <path d="m6 6 12 12" />
                </svg>
             </span>
          </span>
-         <button
-            class="w-14 xx:w-12 h-12 rounded-xl border-2 overflow-hidden p-2 flex justify-center items-center text-gray-400">
+         <button class="w-14 xx:w-12 h-12 rounded-xl border-2 flex justify-center items-center text-gray-400"
+            id="gridlist-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               class="lucide lucide-layout-grid">
+               class="lucide lucide-layout-grid" id="grid">
                <rect width="7" height="7" x="3" y="3" rx="1" />
                <rect width="7" height="7" x="14" y="3" rx="1" />
                <rect width="7" height="7" x="14" y="14" rx="1" />
                <rect width="7" height="7" x="3" y="14" rx="1" />
             </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-list hidden" id="list">
+               <line x1="8" x2="21" y1="6" y2="6" />
+               <line x1="8" x2="21" y1="12" y2="12" />
+               <line x1="8" x2="21" y1="18" y2="18" />
+               <line x1="3" x2="3.01" y1="6" y2="6" />
+               <line x1="3" x2="3.01" y1="12" y2="12" />
+               <line x1="3" x2="3.01" y1="18" y2="18" />
+            </svg>
          </button>
       </div>
       <!-- FILTERS -->
-      <div id="filters" class="flex items-center gap-2 mt-6 mb-4 text-gray-400">
-         <span>Name</span>
-         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-chevrons-up-down">
-            <path d="m7 15 5 5 5-5" />
-            <path d="m7 9 5-5 5 5" />
-         </svg>
+      <div id="filters" class="flex items-center justify-between -mt-2 md:mb-6 mb-4">
+         <div class="flex items-center text-gray-400 w-full max-w-[24.5rem]">
+            <span>Name</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down">
+               <path d="m7 15 5 5 5-5" />
+               <path d="m7 9 5-5 5 5" />
+            </svg>
+         </div>
+         <div class="hidden lg:flex items-center text-gray-400">
+            <span>Developer</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down">
+               <path d="m7 15 5 5 5-5" />
+               <path d="m7 9 5-5 5 5" />
+            </svg>
+         </div>
+         <div>
+            <!-- EMPTY -->
+         </div>
       </div>
       <!-- BODY MAIN -->
       <div id="items-container">
-
+         <!-- DATA LIST -->
       </div>
    </main>
 </body>

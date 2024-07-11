@@ -18,6 +18,9 @@ async function renderDataList() {
    data.forEach((item) => {
       const container = document.createElement("div");
       container.classList.add("flex", "justify-between", "items-center", "my-2", "cursor-pointer");
+      container.addEventListener("click", () => {
+         showModal(item)
+      })
 
       const itemContainer = document.createElement("div");
       itemContainer.classList.add("flex", "gap-3", "items-center", "py-2");
@@ -113,7 +116,10 @@ async function renderDataGrid() {
    itemsContainer.classList.add("xl:grid-cols-3", "grid", "grid-cols-1", "gap-4", "md:grid-cols-2");
    data.forEach((item) => {
       const container = document.createElement("div");
-      container.classList.add("p-4", "bg-white", "rounded-2xl", "border", "max-w-[24.5rem]", "md:max-w-[21.5rem]", "lg:max-w-[23rem]", "w-full", "flex", "flex-col", "mx-auto");
+      container.classList.add("p-4", "bg-white", "rounded-2xl", "border", "max-w-[24.5rem]", "md:max-w-[28rem]", "xl:max-w-[23rem]", "w-full", "flex", "flex-col", "mx-auto");
+      container.addEventListener("click", () => {
+         showModal(item)
+      })
 
       const imageContainer = document.createElement("div");
       imageContainer.classList.add("w-full", "max-h-52", "rounded-xl", "overflow-hidden");
@@ -259,6 +265,179 @@ async function renderDataGrid() {
       itemsContainer.appendChild(container);
    });
 }
+
+// fungsi show modal
+function showModal(item) {
+   // Create modal container
+   const modalContainer = document.createElement("div");
+   modalContainer.classList.add("fixed", "top-0", "left-0", "w-full", "h-full", "bg-gray-500", "bg-opacity-50", "flex", "justify-center", "items-center", "opacity-0", "translate-y-2");
+
+   // Create modal content
+   const modalContent = document.createElement("div");
+   modalContent.classList.add("bg-white", "rounded-t-2xl", "md:rounded-2xl", "p-5", "w-full", "max-w-xl", "lg:max-w-3xl", "xl:max-w-4xl", "max-h-[40rem]", "relative");
+
+   const closeButton = document.createElement("button");
+   // Add SVG to close button
+   closeButton.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+         class="lucide lucide-x">
+         <path d="M18 6 6 18" />
+         <path d="m6 6 12 12" />
+      </svg>
+   `;
+   closeButton.classList.add("absolute", "top-6", "right-5", "text-gray-500")
+   closeButton.addEventListener("click", () => {
+      modalContainer.classList.remove("opacity-100", "translate-y-0");
+      modalContainer.classList.add("opacity-0", "translate-y-2");
+      setTimeout(() => {
+         modalContainer.remove();
+      }, 300); // wait for the animation to finish before removing the modal
+   });
+   modalContent.appendChild(closeButton)
+
+   // Create modal header
+
+   const headerContent = document.createElement("div");
+   headerContent.classList.add("flex", "flex-wrap", "items-center", "mb-6", "mt-8", "w-full", "lg:justify-between");
+
+   const logoAndHeader = document.createElement("div");
+   logoAndHeader.classList.add("flex", "flex-wrap", "w-full", "lg:w-auto");
+   headerContent.appendChild(logoAndHeader);
+
+   const logoContainer = document.createElement("div");
+   logoContainer.classList.add("w-14", "h-14", "xx:w-16", "xx:h-16", "lg:w-40", "lg:h-40", "rounded-xl", "overflow-hidden");
+
+   const logo = document.createElement("img");
+   logo.src = item.logo;
+   logo.classList.add("w-full", "h-full", "object-cover", "object-center");
+   logoContainer.appendChild(logo);
+   logoAndHeader.appendChild(logoContainer);
+
+   
+
+   const header = document.createElement("div")
+   header.classList.add("flex", "flex-col", "justify-center", "w-auto", "max-w-lg", "ml-2", "xx:ml-4", "mb-2", "h-fit");
+
+   const titleContainer = document.createElement("div");
+   titleContainer.classList.add("flex", "gap-3", "items-center", "xx:gap-4", "w-full");
+
+   const title = document.createElement("h2");
+   title.textContent = item.title;
+   title.classList.add("font-semibold", "capitalize", "text-lg", "xx:leading-9", "xx:text-xl", "xx:col-span-2");
+   titleContainer.appendChild(title);
+
+   const share = document.createElement("button");
+   const shareIcon = document.createElement("span");
+   const shareText = document.createElement("p");
+   shareText.textContent = "Share";
+   shareText.classList.add("text-xs", "capitalize", "font-semibold", "leading-4");
+   shareIcon.classList.add("w-4", "h-4", "inline-block");
+   shareIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2 w-full h-full"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>`
+   share.classList.add("text-green-500", "w-fit", "h-8", "pl-2", "pr-3", "rounded-md", "flex", "items-center", "gap-2", "justify-self-end", "self-end", "border","border-green-500");
+   share.appendChild(shareIcon);
+   share.appendChild(shareText);
+   titleContainer.appendChild(share);
+
+   const developer = document.createElement("p");
+   developer.textContent = item.developer;
+   developer.classList.add("text-green-500", "capitalize", "leading-6", "text-sm");
+
+   header.appendChild(titleContainer);
+   header.appendChild(developer);
+
+   const info = document.createElement("div");
+   info.classList.add("flex", "justify-center", "lg:justify-start", "h-fit", "w-full", "mx-auto", "lg:mr-0", "mb-4", "lg:mb-0","lg:ml-4", "lg:order-last");
+
+   const version = document.createElement("div");
+   const versionNumber = document.createElement("p");
+   versionNumber.textContent = "1.0.7";
+   versionNumber.classList.add("font-semibold", "text-gray-900", "text-xs");
+   version.classList.add("flex", "flex-col", "gap-1", "text-xx", "items-center", "capitalize", "text-gray-400");
+   version.appendChild(versionNumber);
+   version.appendChild(document.createTextNode("Version"));
+
+   const separator = document.createElement("div");
+   separator.classList.add("w-[1px]", "h-7", "bg-gray-400/20", "mx-6", "my-auto");
+
+   const update = document.createElement("div");
+   const updateNumber = document.createElement("p");
+   updateNumber.textContent = "Jun 10, 23";
+   updateNumber.classList.add("font-semibold", "text-gray-900", "text-xs");
+   update.classList.add("flex", "flex-col", "gap-1", "text-xx", "items-center", "capitalize", "text-gray-400");
+   update.appendChild(updateNumber);
+   update.appendChild(document.createTextNode("Last update"));
+
+   info.appendChild(version);
+   info.appendChild(separator);
+   info.appendChild(update);
+
+   
+   const headerInfo = document.createElement("div");
+   headerInfo.classList.add("flex", "flex-col", "justify-center");
+   
+   const updateDisplay = () => {
+      if (window.innerWidth < 1024) {
+         logoAndHeader.appendChild(header);
+         logoAndHeader.appendChild(info);
+      } else if (window.innerWidth >= 1024) {
+         headerInfo.appendChild(header);
+         headerInfo.appendChild(info);
+         logoAndHeader.appendChild(headerInfo);
+      }
+   };
+
+   // Update the display style on window resize
+   window.addEventListener('resize', updateDisplay());
+
+   // install button
+   const installBtn = document.createElement("button");
+   installBtn.textContent = "Install";
+   installBtn.classList.add("w-full", "lg:w-fit", "border", "py-2", "lg:px-4", "text-sm", "bg-green-500", "rounded-xl", "lg:rounded-lg", "text-white", "flex", "items-center", "gap-1", "justify-center", "justify-self-end");
+   headerContent.appendChild(installBtn);
+
+   modalContent.appendChild(headerContent);
+
+   // image
+   const imageContainers = document.createElement("div");
+   imageContainers.classList.add("w-full", "h-28", "my-4", "overflow-y-hidden", "rounded-sm", "flex",);
+
+   const imageContainer = document.createElement("div");
+   imageContainer.classList.add("w-", "h-full");
+   const image = document.createElement("img");
+   image.src = item.image;
+   image.classList.add("w-full", "h-full", "object-cover", "object-center");
+   imageContainer.appendChild(image);
+   imageContainers.appendChild(imageContainer);
+   modalContent.appendChild(imageContainers);
+
+   // description
+   const titleDescription = document.createElement("h3");
+   titleDescription.textContent = "summary";
+   titleDescription.classList.add("text-xl", "text-gray-900", "mb-2", "capitalize", "font-semibold");
+   modalContent.appendChild(titleDescription);
+
+   const description = document.createElement("p");
+   description.textContent = item.description;
+   description.classList.add("text-gray-500", "line-clamp-5", "mb-6");
+
+   modalContent.appendChild(description);
+
+   // Read All button
+   const readAllBtn = document.createElement("button");
+   readAllBtn.textContent = "Read All";
+   readAllBtn.classList.add("w-full", "font-semibold", "rounded-xl", "text-blue-500", "flex", "absolute", "bottom-3");
+   modalContent.appendChild(readAllBtn);
+
+   // Add modal container to body
+   document.body.appendChild(modalContainer);
+   setTimeout(() => {
+      modalContainer.classList.add("opacity-100", "translate-y-0", "transition", "duration-300", "ease-in-out");
+      modalContainer.classList.remove("opacity-0", "translate-y-2");
+   }, 0);
+   modalContainer.appendChild(modalContent);
+}
+
 
 // fungsi untuk ubah menjadi grid dan list 
 

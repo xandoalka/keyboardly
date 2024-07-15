@@ -1,6 +1,8 @@
 const itemsContainer = document.querySelector("#items-container");
 const filterName = document.querySelector("#filter-name");
 const filterDeveloper = document.querySelector("#filter-developer");
+const searchInput = document.querySelector("#search-input");
+const clearIcon = document.querySelector("#clear-icon");
 
 let currentSortOrder = { field: "title", order: "asc" };
 
@@ -23,6 +25,10 @@ function sortData(data, key, order) {
          return b[key].localeCompare(a[key]);
       }
    });
+}
+
+function filterData(data, query) {
+   return data.filter(item => item.title.toLowerCase().includes(query.toLowerCase()));
 }
 
 async function renderDataList(data) {
@@ -496,4 +502,32 @@ function updateFilterUI(activeFilter, order) {
          paths[1].classList.add("text-gray-600");
       }
    }
+}
+
+searchInput.addEventListener("input", search);
+
+async function search() {
+   const query = searchInput.value;
+   if (query.length >= 2) {
+      clearIcon.classList.remove("hidden");
+      const data = await getData();
+      const filteredData = filterData(sortData(data, currentSortOrder.field, currentSortOrder.order), query);
+      renderDataList(filteredData);
+   } else {
+      clearIcon.classList.add("hidden");
+      renderData();
+   }
+}
+
+clearIcon.addEventListener("click", () => {
+   searchInput.value = "";
+   clearIcon.classList.add("hidden");
+   renderData();
+});
+
+async function renderData() {
+   const data = await getData();
+   const sortedData = sortData(data, currentSortOrder.field, currentSortOrder.order);
+   renderDataList(sortedData);
+   updateFilterUI(currentSortOrder.field, currentSortOrder.order);
 }

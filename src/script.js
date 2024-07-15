@@ -609,7 +609,7 @@ function showShareModal(item) {
    modalContent.appendChild(header);
 
    const shareOptions = document.createElement("div");
-   shareOptions.classList.add("flex", "gap-8", "overflow-x-auto", "mb-4", "whitespace-nowrap", "-mx-5", "px-5", "md:justify-between", "md:mx-0", "md:px-0", "w-full");
+   shareOptions.classList.add("flex", "gap-8", "overflow-x-auto", "mb-4", "whitespace-nowrap", "-mx-7", "px-5", "md:justify-between", "md:mx-0", "md:px-0", "md:w-full");
 
    const shareOption1 = document.createElement("button");
    shareOption1.classList.add("flex", "flex-col", "items-center", "gap-1");

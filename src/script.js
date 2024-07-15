@@ -1,7 +1,12 @@
 const itemsContainer = document.querySelector("#items-container");
+const filterName = document.querySelector("#filter-name");
+const filterDeveloper = document.querySelector("#filter-developer");
+
+let nameSortOrder = "asc";
+let developerSortOrder = "asc";
 
 async function getData() {
-   const url = "https://xanzu-postgresql.vercel.app"
+   const url = "https://xanzu-postgresql.vercel.app";
    try {
       const response = await fetch(url);
       const data = await response.json();
@@ -11,16 +16,25 @@ async function getData() {
    }
 }
 
-async function renderDataList() {
-   const data = await getData();
+function sortData(data, key, order) {
+   return data.sort((a, b) => {
+      if (order === "asc") {
+         return a[key].localeCompare(b[key]);
+      } else {
+         return b[key].localeCompare(a[key]);
+      }
+   });
+}
+
+async function renderDataList(data) {
    itemsContainer.innerHTML = "";
    itemsContainer.classList.remove("xl:grid-cols-3", "grid", "grid-cols-1", "gap-4", "md:grid-cols-2");
    data.forEach((item) => {
       const container = document.createElement("div");
       container.classList.add("flex", "justify-between", "items-center", "my-2", "cursor-pointer");
       container.addEventListener("click", () => {
-         showModal(item)
-      })
+         showModal(item);
+      });
 
       const itemContainer = document.createElement("div");
       itemContainer.classList.add("flex", "gap-3", "items-center", "py-2");
@@ -56,15 +70,11 @@ async function renderDataList() {
          }
       };
 
-      // Set the initial display style
       updateDisplayStyle();
-
-      // Update the display style on window resize
       window.addEventListener('resize', updateDisplayStyle);
 
       description.textContent = item.description;
       dataContainer.appendChild(description);
-
 
       const developerContainer = document.createElement("div");
       developerContainer.classList.add("hidden", "lg:flex", "items-center", "text-gray-800", "font-medium", "capitalize");
@@ -77,7 +87,6 @@ async function renderDataList() {
       const install = document.createElement("button");
       install.classList.add("bg-green-500", "text-white", "px-2", "py-1", "rounded-md", "font-semibold", "text-sm", "flex", "gap-1", "items-center");
 
-      // Buat elemen SVG
       const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       icon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
       icon.setAttribute("width", "24");
@@ -90,7 +99,6 @@ async function renderDataList() {
       icon.setAttribute("stroke-linejoin", "round");
       icon.classList.add("w-6", "h-6");
 
-      // Tambahkan path ke dalam SVG
       const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path1.setAttribute("d", "M5 12h14");
       icon.appendChild(path1);
@@ -110,16 +118,15 @@ async function renderDataList() {
    });
 }
 
-async function renderDataGrid() {
-   const data = await getData();
+async function renderDataGrid(data) {
    itemsContainer.innerHTML = "";
    itemsContainer.classList.add("xl:grid-cols-3", "grid", "grid-cols-1", "gap-4", "md:grid-cols-2");
    data.forEach((item) => {
       const container = document.createElement("div");
       container.classList.add("p-4", "bg-white", "rounded-2xl", "border", "max-w-[24.5rem]", "md:max-w-[28rem]", "xl:max-w-[23rem]", "w-full", "flex", "flex-col", "mx-auto");
       container.addEventListener("click", () => {
-         showModal(item)
-      })
+         showModal(item);
+      });
 
       const imageContainer = document.createElement("div");
       imageContainer.classList.add("w-full", "max-h-52", "rounded-xl", "overflow-hidden");
@@ -134,7 +141,6 @@ async function renderDataGrid() {
       left.classList.add("flex", "items-center", "gap-3");
       const right = document.createElement("div");
       right.classList.add("flex", "items-center", "gap-3");
-
 
       const logoContainer = document.createElement("div");
       logoContainer.classList.add("w-10", "h-10", "rounded-xl", "overflow-hidden");
@@ -159,7 +165,6 @@ async function renderDataGrid() {
       const cost = document.createElement("p");
       cost.classList.add("text-gray-400", "text-sm", "flex", "items-center", "gap-1");
 
-      // Buat elemen SVG
       const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
       svg.setAttribute("width", "24");
@@ -172,7 +177,6 @@ async function renderDataGrid() {
       svg.setAttribute("stroke-linejoin", "round");
       svg.classList.add("lucide", "lucide-banknote", "w-4", "h-4", "flex", "items-stretch", "justify-center", "text-gray-500");
 
-      // Tambahkan elemen `rect` ke dalam SVG
       const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       rect.setAttribute("width", "22");
       rect.setAttribute("height", "18");
@@ -181,14 +185,12 @@ async function renderDataGrid() {
       rect.setAttribute("rx", "5");
       svg.appendChild(rect);
 
-      // Tambahkan elemen `circle` ke dalam SVG
       const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       circle.setAttribute("cx", "12");
       circle.setAttribute("cy", "12");
       circle.setAttribute("r", "2");
       svg.appendChild(circle);
 
-      // Tambahkan elemen `path` ke dalam SVG
       const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path1.setAttribute("d", "M6 12h.01");
       svg.appendChild(path1);
@@ -197,13 +199,11 @@ async function renderDataGrid() {
       path2.setAttribute("d", "M18 12h.01");
       svg.appendChild(path2);
 
-      // Tambahkan SVG ke dalam elemen `p`
       cost.appendChild(svg);
 
-      // Tambahkan teks `item.cost`
       if (item.cost.toLowerCase() === "free") {
          cost.appendChild(document.createTextNode("free"));
-         cost.classList.add("capitalize")
+         cost.classList.add("capitalize");
       } else {
          if (item.subscribe === "NO") {
             cost.appendChild(document.createTextNode("Rp " + item.cost.replace(/\B(?=(\d{3})+(?!\d))/g, ".")));
@@ -216,7 +216,6 @@ async function renderDataGrid() {
       const download = document.createElement("p");
       download.classList.add("text-gray-400", "capitalize", "text-sm", "flex", "items-center", "gap-1");
 
-      // Buat elemen SVG
       const svgDownload = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       svgDownload.setAttribute("xmlns", "http://www.w3.org/2000/svg");
       svgDownload.setAttribute("width", "24");
@@ -229,7 +228,6 @@ async function renderDataGrid() {
       svgDownload.setAttribute("stroke-linejoin", "round");
       svgDownload.classList.add("lucide", "lucide-download", "w-4", "h-4", "flex", "items-stretch", "justify-center", "text-gray-500");
 
-      // Tambahkan path ke dalam SVG
       const path1Download = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path1Download.setAttribute("d", "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4");
       svgDownload.appendChild(path1Download);
@@ -245,10 +243,7 @@ async function renderDataGrid() {
       lineDownload.setAttribute("y2", "3");
       svgDownload.appendChild(lineDownload);
 
-      // Tambahkan SVG ke dalam elemen `p`
       download.appendChild(svgDownload);
-
-      // Tambahkan teks `item.download`
       download.appendChild(document.createTextNode(item.download));
 
       right.appendChild(download);
@@ -257,7 +252,6 @@ async function renderDataGrid() {
       left.appendChild(description);
 
       dataContainer.appendChild(left);
-
       dataContainer.appendChild(right);
 
       container.appendChild(imageContainer);
@@ -266,37 +260,31 @@ async function renderDataGrid() {
    });
 }
 
-// fungsi show modal
 function showModal(item) {
-   // Create modal container
    const modalContainer = document.createElement("div");
    modalContainer.classList.add("fixed", "top-0", "left-0", "w-full", "h-full", "bg-gray-500", "bg-opacity-50", "flex", "justify-center", "items-center", "opacity-0", "translate-y-2");
 
-   // Create modal content
    const modalContent = document.createElement("div");
    modalContent.classList.add("bg-white", "rounded-t-2xl", "md:rounded-2xl", "p-5", "w-full", "max-w-xl", "lg:max-w-3xl", "xl:max-w-4xl", "max-h-[40rem]", "relative");
 
    const closeButton = document.createElement("button");
-   // Add SVG to close button
    closeButton.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-         class="lucide lucide-x">
-         <path d="M18 6 6 18" />
-         <path d="m6 6 12 12" />
-      </svg>
-   `;
-   closeButton.classList.add("absolute", "top-6", "right-5", "text-gray-500")
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-x">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+        </svg>
+    `;
+   closeButton.classList.add("absolute", "top-6", "right-5", "text-gray-500");
    closeButton.addEventListener("click", () => {
       modalContainer.classList.remove("opacity-100", "translate-y-0");
       modalContainer.classList.add("opacity-0", "translate-y-2");
       setTimeout(() => {
          modalContainer.remove();
-      }, 300); // wait for the animation to finish before removing the modal
+      }, 300);
    });
-   modalContent.appendChild(closeButton)
-
-   // Create modal header
+   modalContent.appendChild(closeButton);
 
    const headerContent = document.createElement("div");
    headerContent.classList.add("flex", "flex-wrap", "items-center", "mb-6", "mt-8", "w-full", "lg:justify-between");
@@ -314,9 +302,7 @@ function showModal(item) {
    logoContainer.appendChild(logo);
    logoAndHeader.appendChild(logoContainer);
 
-   
-
-   const header = document.createElement("div")
+   const header = document.createElement("div");
    header.classList.add("flex", "flex-col", "justify-center", "w-auto", "max-w-lg", "ml-2", "xx:ml-4", "mb-2", "h-fit");
 
    const titleContainer = document.createElement("div");
@@ -333,8 +319,8 @@ function showModal(item) {
    shareText.textContent = "Share";
    shareText.classList.add("text-xs", "capitalize", "font-semibold", "leading-4");
    shareIcon.classList.add("w-4", "h-4", "inline-block");
-   shareIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2 w-full h-full"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>`
-   share.classList.add("text-green-500", "w-fit", "h-8", "pl-2", "pr-3", "rounded-md", "flex", "items-center", "gap-2", "justify-self-end", "self-end", "border","border-green-500");
+   shareIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2 w-full h-full"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>`;
+   share.classList.add("text-green-500", "w-fit", "h-8", "pl-2", "pr-3", "rounded-md", "flex", "items-center", "gap-2", "justify-self-end", "self-end", "border", "border-green-500");
    share.appendChild(shareIcon);
    share.appendChild(shareText);
    titleContainer.appendChild(share);
@@ -347,7 +333,7 @@ function showModal(item) {
    header.appendChild(developer);
 
    const info = document.createElement("div");
-   info.classList.add("flex", "justify-center", "lg:justify-start", "h-fit", "w-full", "mx-auto", "lg:mr-0", "mb-4", "lg:mb-0","lg:ml-4", "lg:order-last");
+   info.classList.add("flex", "justify-center", "lg:justify-start", "h-fit", "w-full", "mx-auto", "lg:mr-0", "mb-4", "lg:mb-0", "lg:ml-4", "lg:order-last");
 
    const version = document.createElement("div");
    const versionNumber = document.createElement("p");
@@ -372,10 +358,9 @@ function showModal(item) {
    info.appendChild(separator);
    info.appendChild(update);
 
-   
    const headerInfo = document.createElement("div");
    headerInfo.classList.add("flex", "flex-col", "justify-center");
-   
+
    const updateDisplay = () => {
       if (window.innerWidth < 1024) {
          logoAndHeader.appendChild(header);
@@ -387,10 +372,8 @@ function showModal(item) {
       }
    };
 
-   // Update the display style on window resize
    window.addEventListener('resize', updateDisplay());
 
-   // install button
    const installBtn = document.createElement("button");
    installBtn.textContent = "Install";
    installBtn.classList.add("w-full", "lg:w-fit", "border", "py-2", "lg:px-4", "text-sm", "bg-green-500", "rounded-xl", "lg:rounded-lg", "text-white", "flex", "items-center", "gap-1", "justify-center", "justify-self-end");
@@ -398,9 +381,8 @@ function showModal(item) {
 
    modalContent.appendChild(headerContent);
 
-   // image
    const imageContainers = document.createElement("div");
-   imageContainers.classList.add("w-full", "h-28", "my-4", "overflow-y-hidden", "rounded-sm", "flex",);
+   imageContainers.classList.add("w-full", "h-28", "my-4", "overflow-y-hidden", "rounded-sm", "flex");
 
    const imageContainer = document.createElement("div");
    imageContainer.classList.add("w-", "h-full");
@@ -411,7 +393,6 @@ function showModal(item) {
    imageContainers.appendChild(imageContainer);
    modalContent.appendChild(imageContainers);
 
-   // description
    const titleDescription = document.createElement("h3");
    titleDescription.textContent = "summary";
    titleDescription.classList.add("text-xl", "text-gray-900", "mb-2", "capitalize", "font-semibold");
@@ -423,13 +404,11 @@ function showModal(item) {
 
    modalContent.appendChild(description);
 
-   // Read All button
    const readAllBtn = document.createElement("button");
    readAllBtn.textContent = "Read All";
    readAllBtn.classList.add("w-full", "font-semibold", "rounded-xl", "text-blue-500", "flex", "absolute", "bottom-3");
    modalContent.appendChild(readAllBtn);
 
-   // Add modal container to body
    document.body.appendChild(modalContainer);
    setTimeout(() => {
       modalContainer.classList.add("opacity-100", "translate-y-0", "transition", "duration-300", "ease-in-out");
@@ -438,31 +417,75 @@ function showModal(item) {
    modalContainer.appendChild(modalContent);
 }
 
-
-// fungsi untuk ubah menjadi grid dan list 
-
 const gridListBtn = document.querySelector("#gridlist-btn");
 const gridBtn = document.querySelector("#grid");
 const listBtn = document.querySelector("#list");
 const filters = document.querySelector("#filters");
 
-document.addEventListener("DOMContentLoaded", () => {
-   if (listBtn.classList.contains("hidden")) {
-      renderDataList()
-   } else {
-      renderDataGrid()
-   }
+document.addEventListener("DOMContentLoaded", async () => {
+   const data = await getData();
+   const sortedData = sortData(data, "title", nameSortOrder);
+   renderDataList(sortedData);
+   updateFilterUI("name", nameSortOrder);
 });
-gridListBtn.addEventListener("click", () => {
+
+gridListBtn.addEventListener("click", async () => {
+   const data = await getData();
    if (gridBtn.classList.contains("hidden")) {
       gridBtn.classList.remove("hidden");
       listBtn.classList.add("hidden");
       filters.classList.remove("hidden");
-      renderDataList();
+      renderDataList(data);
    } else {
       gridBtn.classList.add("hidden");
       listBtn.classList.remove("hidden");
       filters.classList.add("hidden");
-      renderDataGrid();
+      renderDataGrid(data);
    }
 });
+
+filterName.addEventListener("click", async () => {
+   const data = await getData();
+   nameSortOrder = nameSortOrder === "asc" ? "desc" : "asc";
+   const sortedData = sortData(data, "title", nameSortOrder);
+   renderDataList(sortedData);
+   updateFilterUI("name", nameSortOrder);
+});
+
+filterDeveloper.addEventListener("click", async () => {
+   const data = await getData();
+   developerSortOrder = developerSortOrder === "asc" ? "desc" : "asc";
+   const sortedData = sortData(data, "developer", developerSortOrder);
+   renderDataList(sortedData);
+   updateFilterUI("developer", developerSortOrder);
+});
+
+function updateFilterUI(activeFilter, order) {
+   const filterNameIcon = filterName.querySelector("svg");
+   const filterDeveloperIcon = filterDeveloper.querySelector("svg");
+
+   filterNameIcon.classList.remove("text-gray-600");
+   filterDeveloperIcon.classList.remove("text-gray-600");
+
+   if (activeFilter === "name") {
+      filterDeveloperIcon.classList.add("text-gray-600");
+      const paths = filterNameIcon.querySelectorAll("path");
+      if (order === "asc") {
+         paths[0].classList.add("text-gray-600");
+         paths[1].classList.remove("text-gray-600");
+      } else {
+         paths[0].classList.remove("text-gray-600");
+         paths[1].classList.add("text-gray-600");
+      }
+   } else {
+      filterNameIcon.classList.add("text-gray-600");
+      const paths = filterDeveloperIcon.querySelectorAll("path");
+      if (order === "asc") {
+         paths[0].classList.add("text-gray-600");
+         paths[1].classList.remove("text-gray-600");
+      } else {
+         paths[0].classList.remove("text-gray-600");
+         paths[1].classList.add("text-gray-600");
+      }
+   }
+}

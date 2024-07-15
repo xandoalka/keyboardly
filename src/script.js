@@ -2,8 +2,7 @@ const itemsContainer = document.querySelector("#items-container");
 const filterName = document.querySelector("#filter-name");
 const filterDeveloper = document.querySelector("#filter-developer");
 
-let nameSortOrder = "asc";
-let developerSortOrder = "asc";
+let currentSortOrder = { field: "title", order: "asc" };
 
 async function getData() {
    const url = "https://xanzu-postgresql.vercel.app";
@@ -424,40 +423,49 @@ const filters = document.querySelector("#filters");
 
 document.addEventListener("DOMContentLoaded", async () => {
    const data = await getData();
-   const sortedData = sortData(data, "title", nameSortOrder);
+   const sortedData = sortData(data, currentSortOrder.field, currentSortOrder.order);
    renderDataList(sortedData);
-   updateFilterUI("name", nameSortOrder);
+   updateFilterUI(currentSortOrder.field, currentSortOrder.order);
 });
 
 gridListBtn.addEventListener("click", async () => {
    const data = await getData();
+   const sortedData = sortData(data, currentSortOrder.field, currentSortOrder.order);
    if (gridBtn.classList.contains("hidden")) {
       gridBtn.classList.remove("hidden");
       listBtn.classList.add("hidden");
       filters.classList.remove("hidden");
-      renderDataList(data);
+      renderDataList(sortedData);
    } else {
       gridBtn.classList.add("hidden");
       listBtn.classList.remove("hidden");
       filters.classList.add("hidden");
-      renderDataGrid(data);
+      renderDataGrid(sortedData);
    }
 });
 
 filterName.addEventListener("click", async () => {
    const data = await getData();
-   nameSortOrder = nameSortOrder === "asc" ? "desc" : "asc";
-   const sortedData = sortData(data, "title", nameSortOrder);
+   if (currentSortOrder.field !== "title") {
+      currentSortOrder = { field: "title", order: "asc" };
+   } else {
+      currentSortOrder.order = currentSortOrder.order === "asc" ? "desc" : "asc";
+   }
+   const sortedData = sortData(data, currentSortOrder.field, currentSortOrder.order);
    renderDataList(sortedData);
-   updateFilterUI("name", nameSortOrder);
+   updateFilterUI(currentSortOrder.field, currentSortOrder.order);
 });
 
 filterDeveloper.addEventListener("click", async () => {
    const data = await getData();
-   developerSortOrder = developerSortOrder === "asc" ? "desc" : "asc";
-   const sortedData = sortData(data, "developer", developerSortOrder);
+   if (currentSortOrder.field !== "developer") {
+      currentSortOrder = { field: "developer", order: "asc" };
+   } else {
+      currentSortOrder.order = currentSortOrder.order === "asc" ? "desc" : "asc";
+   }
+   const sortedData = sortData(data, currentSortOrder.field, currentSortOrder.order);
    renderDataList(sortedData);
-   updateFilterUI("developer", developerSortOrder);
+   updateFilterUI(currentSortOrder.field, currentSortOrder.order);
 });
 
 function updateFilterUI(activeFilter, order) {
@@ -467,7 +475,7 @@ function updateFilterUI(activeFilter, order) {
    filterNameIcon.classList.remove("text-gray-600");
    filterDeveloperIcon.classList.remove("text-gray-600");
 
-   if (activeFilter === "name") {
+   if (activeFilter === "title") {
       filterDeveloperIcon.classList.add("text-gray-600");
       const paths = filterNameIcon.querySelectorAll("path");
       if (order === "asc") {
